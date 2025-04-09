@@ -1,7 +1,113 @@
-# .gitignore
+# --- Python Virtual Environments ---
+# Common names for virtual environments
+.venv/
 venv/
+env/
+ENV/
+# Environment directories often created in subfolders
+*/ENV/
+*/venv/
+*/.venv/
+# pyenv version file
+.python-version
+
+# --- Python Cache & Compiled Files ---
+# Bytecode and optimized files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.env
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# --- Distribution / Packaging ---
+dist/
+build/
+*.egg-info/
+wheels/
+*.egg
+MANIFEST
+# PyInstaller
+# Usually ignored unless distributing build artifacts is intended
+# *.spec
+
+# --- Dependency Management Files ---
+# Lock files are often committed, but some teams ignore them
+# Pipenv
+# Pipfile.lock
+# Poetry
+# poetry.lock
+# Logs and temporary files from pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Secrets & Configuration ---
+# Environment variables - DO NOT COMMIT ACTUAL SECRETS
+.env*
+# Allow example files to be committed
+!.env.example
+# Other potential credential/secret files
+*.cred*
+credentials.*
+secrets.*
+config.yaml
+config.yml
+
+# --- Testing Artifacts ---
+# Pytest cache
+.pytest_cache/
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+
+# --- Type Checking ---
+# Mypy cache
+.mypy_cache/
+# Pyright / PyLance cache
+.pyright_cache/
+
+# --- Editor & IDE Specific ---
+# VS Code
+.vscode/
+# PyCharm
+.idea/
+# SublimeText
+*.sublime-project
+*.sublime-workspace
+# Vim
+*.sw[op]
+# Emacs
+*~
+#*.elc
+.#*
+
+# --- OS Specific ---
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Logs ---
+# Application log files
+*.log
+logs/
+*.log.*
+
+# --- Notebooks ---
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# --- Other ---
+# Temporary files
+*.tmp
+*.bak
+*.bkp

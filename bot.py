@@ -59,12 +59,24 @@ async def attribute_speakers(interaction: discord.Interaction, execution_id: str
     """Slash command handler to send data to n8n."""
     logger.info(f"Received /attribute-speakers from {interaction.user} for execution ID: {execution_id}")
 
+    # Parse the metadata string into a dictionary
+    speaker_map = {}
+    try:
+        pairs = metadata.split(',')
+        for pair in pairs:
+            speaker_id, speaker_name = pair.strip().split(':')
+            speaker_map[speaker_id] = speaker_name
+    except ValueError as e:
+        logger.error(f"Error parsing metadata string: {e}")
+        await interaction.response.send_message("❌ Invalid metadata format. Please use format 'speaker_00:name,speaker_01:name'", ephemeral=True)
+        return
+
     webhook_url = f"{N8N_WEBHOOK_BASE_URL.rstrip('/')}/webhook-waiting/{execution_id}"
     logger.info(f"Target n8n webhook URL: {webhook_url}")
 
-    # Updated payload to include transcription_id
+    # Updated payload to include parsed speaker map
     payload = {
-        "metadata": metadata,
+        "metadata": speaker_map,
         "transcription_id": transcription_id
     }
 
@@ -79,7 +91,6 @@ async def attribute_speakers(interaction: discord.Interaction, execution_id: str
 
         logger.info(f"n8n workflow {execution_id} successfully triggered. Status: {response.status_code}")
         await interaction.followup.send(f"✅ Successfully sent metadata for execution `{execution_id}` to the workflow!", ephemeral=True)
-
     except requests.exceptions.RequestException as e:
         logger.error(f"Error sending request to n8n for execution {execution_id}: {e}")
         error_message = f"❌ Failed to send metadata to the workflow for execution `{execution_id}`."
