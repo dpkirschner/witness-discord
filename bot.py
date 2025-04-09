@@ -49,26 +49,23 @@ async def on_ready():
     logger.info('Bot is ready and listening!')
 
 # --- Bot Commands ---
-@tree.command(name="provide-metadata", description="Send metadata back to a waiting n8n workflow.")
+@tree.command(name="attribute-speakers", description="Send metadata back to a waiting n8n workflow.")
 @app_commands.describe(
     execution_id="The n8n execution ID provided in the initial message.",
-    metadata="The metadata value you need to provide."
+    metadata="The metadata value you need to provide.",
+    transcription_id="The transcription ID to associate with this metadata."
 )
-async def provide_metadata(interaction: discord.Interaction, execution_id: str, metadata: str):
+async def attribute_speakers(interaction: discord.Interaction, execution_id: str, metadata: str, transcription_id: str):
     """Slash command handler to send data to n8n."""
-    logger.info(f"Received /provide-metadata from {interaction.user} for execution ID: {execution_id}")
+    logger.info(f"Received /attribute-speakers from {interaction.user} for execution ID: {execution_id}")
 
-    # Construct the target n8n webhook URL
-    # IMPORTANT: Verify this path matches your n8n Wait node's webhook URL structure!
-    # It's often /webhook-waiting/<execution_id> but could be /webhook/<workflow_id>/wait/<execution_id>
-    # Check the URL displayed by the n8n Wait node when it's active.
     webhook_url = f"{N8N_WEBHOOK_BASE_URL.rstrip('/')}/webhook-waiting/{execution_id}"
     logger.info(f"Target n8n webhook URL: {webhook_url}")
 
-    # Prepare the data payload for n8n
+    # Updated payload to include transcription_id
     payload = {
-        "metadata": metadata
-        # Add other fields if your n8n workflow expects them
+        "metadata": metadata,
+        "transcription_id": transcription_id
     }
 
     # Make the POST request to n8n
